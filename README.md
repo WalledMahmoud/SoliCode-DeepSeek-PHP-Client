@@ -1,9 +1,6 @@
 # 🚀 SoliCode DeepSeek PHP Client
 
 [![Latest Version](https://img.shields.io/packagist/v/solicode/deepseek-php-client.svg)](https://packagist.org/packages/solicode/deepseek-php-client)  
-[![PHP Version](https://img.shields.io/packagist/php-v/solicode/deepseek-php-client)](https://php.net)  
-[![License](https://img.shields.io/github/license/WalledMahmoud/SoliCode-DeepSeek-PHP-Client)](LICENSE)  
-[![CI/CD](https://github.com/WalledMahmoud/SoliCode-DeepSeek-PHP-Client/actions/workflows/php.yml/badge.svg)](https://github.com/WalledMahmoud/SoliCode-DeepSeek-PHP-Client/actions)  
 
 A modern PHP client for DeepSeek's AI API, featuring robust error handling and full PSR compliance.
 
@@ -140,5 +137,5 @@ composer fix-style
 ## 📜 License
 MIT License - See [LICENSE](LICENSE) for full text.
 
-Maintained by **SoliCode** • Report issues [here](https://github.com/WalledMahmoud/SoliCode-DeepSeek-PHP-Client/issues)
+Developed with ❤️ by **SoliCode** • Report issues [here](https://github.com/WalledMahmoud/SoliCode-DeepSeek-PHP-Client/issues)
 
