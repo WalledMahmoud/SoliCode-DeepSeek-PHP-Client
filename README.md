@@ -34,8 +34,9 @@ try {
 
     // List available models
     $models = $client->models();
-    echo "Available models:\n";
+    echo "<pre>Available models:\n";
     print_r($models['data']);
+    echo "</pre>";
 
     // Generate chat completion
     $response = $client->chat(
@@ -45,13 +46,14 @@ try {
         ]
     );
 
-    echo "\nResponse:\n" . $response['choices'][0]['message']['content'];
+    echo "<pre>\nResponse:\n" . htmlspecialchars($response['choices'][0]['message']['content']) . "</pre>";
 
 } catch (InsufficientBalanceException $e) {
-    die("Error: Add funds to your DeepSeek account");
+    die("<pre>Error: Add funds to your DeepSeek account</pre>");
 } catch (\Exception $e) {
-    die("Error: {$e->getMessage()}");
+    die("<pre>Error: " . htmlspecialchars($e->getMessage()) . "</pre>");
 }
+
 ```
 
 ## 📖 Advanced Features
