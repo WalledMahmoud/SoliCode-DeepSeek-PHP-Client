@@ -1,72 +1,144 @@
-# 🚀 SoliCode DeepSeek PHP Client  
+# 🚀 SoliCode DeepSeek PHP Client
 
-A **powerful**, **well-structured**, and **fully featured** PHP client for the **DeepSeek AI API**, developed by **SoliCode**. This library provides seamless integration with DeepSeek's AI models, offering robust functionality for **chat interactions, model exploration, and image generation**.  
+[![Latest Version](https://img.shields.io/packagist/v/solicode/deepseek-php-client.svg)](https://packagist.org/packages/solicode/deepseek-php-client)  
+[![PHP Version](https://img.shields.io/packagist/php-v/solicode/deepseek-php-client)](https://php.net)  
+[![License](https://img.shields.io/github/license/WalledMahmoud/SoliCode-DeepSeek-PHP-Client)](LICENSE)  
+[![CI/CD](https://github.com/WalledMahmoud/SoliCode-DeepSeek-PHP-Client/actions/workflows/php.yml/badge.svg)](https://github.com/WalledMahmoud/SoliCode-DeepSeek-PHP-Client/actions)  
 
----
-
-## ✨ Features  
-
-✅ **Modern PHP (PSR-4 Autoloading, Composer-ready)**  
-✅ **Effortless API requests with Guzzle**  
-✅ **Robust error handling & exceptions**  
-✅ **Supports Chat API & Model listing**  
-✅ **AI-powered Image Generation API**  
-✅ **Production-ready with CI/CD via GitHub Actions**  
-✅ **Comprehensive Unit Testing (PHPUnit)**  
-✅ **Easy-to-use, highly extensible**  
+A modern PHP client for DeepSeek's AI API, featuring robust error handling and full PSR compliance.
 
 ---
 
-## 📦 Installation  
+## 📦 Installation
 
-Ensure you have **Composer** installed, then run:  
+Requires **PHP 7.4+** and [Composer](https://getcomposer.org):
 
-```sh
+```bash
 composer require solicode/deepseek-php-client
-```  
+```
 
----
+### 🔑 Authentication
+Get your API key from DeepSeek Dashboard.
 
-## 🚀 Quick Start  
+Never commit secrets - store in environment variables.
+
+## 🚀 Basic Usage
 
 ```php
 <?php
 
-require 'vendor/autoload.php';
+require __DIR__ . '/vendor/autoload.php';
 
 use SoliCode\DeepSeekClient;
 
-$apiKey = 'your-api-key'; // Replace with your actual DeepSeek API key
-$client = new DeepSeekClient($apiKey);
+try {
+    // Initialize client
+    $client = new DeepSeekClient('your-api-key');
 
-// 🔹 Fetch available AI models
-$models = $client->models();
-print_r($models);
+    // List available models
+    $models = $client->models();
+    echo "Available models:\n";
+    print_r($models['data']);
 
-// 🔹 Chat with DeepSeek AI
-$response = $client->chat('deepseek-model', [['role' => 'user', 'content' => 'Hello, AI!']]);
-print_r($response);
+    // Generate chat completion
+    $response = $client->chat(
+        model: 'deepseek-chat',
+        messages: [
+            ['role' => 'user', 'content' => 'Explain quantum entanglement simply']
+        ]
+    );
 
-// 🔹 Generate an AI-powered image
-$image = $client->generateImage('A stunning cyberpunk city at night');
-print_r($image);
+    echo "\nResponse:\n" . $response['choices'][0]['message']['content'];
 
-?>
+} catch (InsufficientBalanceException $e) {
+    die("Error: Add funds to your DeepSeek account");
+} catch (\Exception $e) {
+    die("Error: {$e->getMessage()}");
+}
 ```
 
----
+## 📖 Advanced Features
 
-## 🛠 Running Tests  
-
-Ensure all dependencies are installed, then run:  
-
-```sh
-vendor/bin/phpunit tests
+### Custom Request Configuration
+```php
+$client = new DeepSeekClient(
+    apiKey: 'your-key',
+    baseUrl: 'https://api.deepseek.com/v1', // Custom endpoint
+    timeout: 15, // Seconds
+    headers: ['X-Custom-Header' => 'value']
+);
 ```
 
----
+### Streaming Responses
+```php
+$stream = $client->chat(
+    'deepseek-chat',
+    [['role' => 'user', 'content' => 'Explain recursion']],
+    ['stream' => true]
+);
 
-## 📜 License  
+foreach ($stream as $chunk) {
+    echo $chunk['choices'][0]['delta']['content'] ?? '';
+}
+```
 
-This project is licensed under the **MIT License**.  
-Developed with ❤️ by [SoliCode](https://solicode.co.uk).  
+### Error Handling Hierarchy
+```php
+try {
+    // API operations
+} catch (InsufficientBalanceException $e) {
+    // Handle payment issues (402 errors)
+} catch (InvalidRequestException $e) {
+    // Handle bad parameters (400 errors)
+} catch (AuthenticationException $e) {
+    // Handle invalid API keys (401 errors)
+} catch (APIConnectionException $e) {
+    // Handle network issues
+} catch (\Exception $e) {
+    // Generic fallback
+}
+```
+
+## 🛠 Development
+
+### Running Tests
+```bash
+composer test
+```
+
+### Code Quality Checks
+```bash
+composer check-style
+composer fix-style
+```
+
+### Contributing
+1. Fork the repository.
+2. Create a feature branch (`feat/your-feature`).
+3. Write tests for new features.
+4. Submit a pull request.
+
+## 📚 API Reference
+
+### DeepSeekClient Methods
+
+| Method      | Parameters                                      | Description                  |
+|------------|--------------------------------|------------------------------|
+| models()   | -                                              | List available models       |
+| chat()     | string $model, array $messages, array $params | Generate chat completion    |
+| __construct() | string $apiKey, ?string $baseUrl, ?array $options | Client initialization |
+
+## ⚠️ Common Errors
+
+| Error Code | Solution |
+|------------|----------|
+| 401 Unauthorized | Verify API key validity |
+| 402 Payment Required | Add funds to your account |
+| 404 Not Found | Verify endpoint URL correctness |
+| 429 Rate Limited | Implement request retry logic |
+
+## 📜 License
+MIT License - See [LICENSE](LICENSE) for full text.
+
+Maintained by **SoliCode** • Report issues [here](https://github.com/WalledMahmoud/SoliCode-DeepSeek-PHP-Client/issues)
+
