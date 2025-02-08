@@ -1,6 +1,6 @@
 <?php
 
-namespace SoliCode\Exceptions;
+namespace SoliCode;
 
 use Exception;
 
